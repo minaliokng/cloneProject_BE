@@ -4,7 +4,7 @@ import helmet from 'helmet';
 import * as compression from 'compression';
 import morgan from './middlewares/morgan';
 import router from './routes';
-import { errorLogger, errorConverter, errorHandler } from './middlewares/error';
+// import { errorLogger, errorConverter, errorHandler } from './middlewares/error';
 import logger from './config/logger';
 
 class App {
@@ -22,14 +22,15 @@ class App {
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(morgan);
     this.app.use(router);
-    this.app.use(errorLogger);
-    this.app.use(errorConverter);
-    this.app.use(errorHandler);
+    // this.app.use(errorLogger);
+    // this.app.use(errorConverter);
+    // this.app.use(errorHandler);
   }
 
   public listen(port: number) {
     this.app.listen(port, () => {
-      logger.info(`${port} 포트로 서버가 열렸습니다.`);
+      // logger.info(`${port} 포트로 서버가 열렸습니다.`);
+      this.setMiddlewares();
     });
   }
 }
