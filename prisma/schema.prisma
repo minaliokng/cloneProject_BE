@@ -1,11 +1,47 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["windows", "darwin"]
+}
+
+model Users {
+  id Int @id @default(autoincrement())
+  userId String  @unique
+  userName String @db.VarChar(20)
+  password String @db.VarChar(20)
+  profileImege String?
+  // 1:n 관계 Posts는 1유저에 여러개를 가질 수 있다.
+  posts Posts[]
+  comments Comments[]
+}
+model Posts {
+  // @id = 기본키지정 
+  postId Int @id @default(autoincrement())
+  tag String @db.VarChar(20)
+  title String @db.VarChar(40)
+  content String @db.VarChar(500)
+  postImage String?
+  createdAt DateTime @default(now())
+  userId Int 
+  profileImege String
+  // n:1 관계 여러 Posts는 1유저만 가질 수 있다.
+  user Users @relation(fields:[userId], references:[id])
+  comments Comments[]
+}
+
+model Comments {
+  commentId Int @id
+  content String @db.VarChar(100)
+  createdAt DateTime @default(now())
+  userId Int
+  postId Int
+  post Posts @relation(fields:[postId], references:[postId])
+  user Users @relation(fields:[userId], references:[id])
 }
