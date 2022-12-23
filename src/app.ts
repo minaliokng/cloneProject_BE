@@ -3,9 +3,8 @@ import * as cors from 'cors';
 import helmet from 'helmet';
 import * as compression from 'compression';
 import morgan from './middlewares/morgan';
-import router from './routes';
-// import { errorLogger, errorConverter, errorHandler } from './middlewares/error';
-import logger from './config/logger';
+import apiRouter from './routes';
+import errorHandler from './middlewares/errorHandler';
 
 class App {
   private app;
@@ -21,10 +20,8 @@ class App {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(morgan);
-    this.app.use(router);
-    // this.app.use(errorLogger);
-    // this.app.use(errorConverter);
-    // this.app.use(errorHandler);
+    this.app.use(apiRouter);
+    this.app.use(errorHandler);
   }
 
   public listen(port: number) {
