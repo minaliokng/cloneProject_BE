@@ -5,6 +5,7 @@ import * as compression from 'compression';
 import morgan from './middlewares/morgan';
 import apiRouter from './routes';
 import errorHandler from './middlewares/errorHandler';
+import logger from './config/logger';
 
 class App {
   private app;
@@ -26,8 +27,7 @@ class App {
 
   public listen(port: number) {
     this.app.listen(port, () => {
-      // logger.info(`${port} 포트로 서버가 열렸습니다.`);
-      this.setMiddlewares();
+      logger.info(`${port} 포트로 서버가 열렸습니다.`);
     });
   }
 }

@@ -1,9 +1,3 @@
-class AuthRepository {
-  test = 0;
-
-  loginKakao = () => {
-    this.test = 1;
-  };
-}
+class AuthRepository {}
 
 export default AuthRepository;
