@@ -1,4 +1,4 @@
-import CommentsRepository from 'repositories/comments.repository';
+import CommentsRepository from '../repositories/comments.repository';
 
 class CommentsService {
   commentsRepository: CommentsRepository;
