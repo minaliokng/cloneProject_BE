@@ -15,18 +15,25 @@ model User {
   userId        Int       @id @default(autoincrement()) @map("id")
   email         String?   @unique
   userName      String
-  password      String
-  profileImege  String?
+  password      String?
+  profileImage  String?
+  snsId         Int?
   posts         Post[]
   comments      Comment[]
+  token         Token?
 	@@map("Users")
+}
+model Token {
+  token         String
+  userId        Int       @id
+  user          User      @relation(fields:[userId], references:[userId])
 }
 model Post {
   postId        Int       @id @default(autoincrement())
   title         String
   content       String
   postImage     String?
-  tag           String
+  privateOption Int
   createdAt     DateTime  @default(now())
   userId        Int
   user          User      @relation(fields:[userId], references:[userId])
