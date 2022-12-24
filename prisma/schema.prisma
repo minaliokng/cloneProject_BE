@@ -17,7 +17,7 @@ model User {
   userName      String
   password      String?
   profileImage  String?
-  snsId         Int?
+  snsId         BigInt?   @db.BigInt
   posts         Post[]
   comments      Comment[]
   token         Token?
