@@ -12,14 +12,13 @@ generator client {
 }
 
 model User {
-  userId        Int       @id @default(autoincrement()) @map("id")
+  userId        Int       @id @default(autoincrement())
   email         String?   @unique
   userName      String
   password      String
   profileImege  String?
   posts         Post[]
   comments      Comment[]
-	@@map("Users")
 }
 model Post {
   postId        Int       @id @default(autoincrement())
@@ -34,7 +33,7 @@ model Post {
 }
 
 model Comment {
-  commentId     Int       @id
+  commentId     Int       @id @default(autoincrement())
   content       String
   createdAt     DateTime  @default(now())
   userId        Int
