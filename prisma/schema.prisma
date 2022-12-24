@@ -22,17 +22,19 @@ model User {
   comments      Comment[]
   token         Token?
 }
+
 model Token {
   token         String
   userId        Int       @id
   user          User      @relation(fields:[userId], references:[userId])
 }
+
 model Post {
   postId        Int       @id @default(autoincrement())
   title         String
   content       String
   postImage     String?
-  tag           String
+  privateOption Int
   createdAt     DateTime  @default(now())
   userId        Int
   user          User      @relation(fields:[userId], references:[userId])
