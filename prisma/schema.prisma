@@ -12,7 +12,7 @@ generator client {
 }
 
 model User {
-  userId        Int       @id @default(autoincrement()) @map("id")
+  userId        Int       @id @default(autoincrement())
   email         String?   @unique
   userName      String
   password      String?
@@ -21,13 +21,14 @@ model User {
   posts         Post[]
   comments      Comment[]
   token         Token?
-	@@map("Users")
 }
+
 model Token {
   token         String
   userId        Int       @id
   user          User      @relation(fields:[userId], references:[userId])
 }
+
 model Post {
   postId        Int       @id @default(autoincrement())
   title         String
@@ -41,7 +42,7 @@ model Post {
 }
 
 model Comment {
-  commentId     Int       @id
+  commentId     Int       @id @default(autoincrement())
   content       String
   createdAt     DateTime  @default(now())
   userId        Int
