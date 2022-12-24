@@ -26,6 +26,7 @@ class App {
   }
 
   public listen(port: number) {
+    this.setMiddlewares();
     this.app.listen(port, () => {
       logger.info(`${port} 포트로 서버가 열렸습니다.`);
     });
