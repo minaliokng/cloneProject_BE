@@ -1,13 +1,14 @@
 import axios from 'axios';
-import { json } from 'stream/consumers';
+import * as jwt from 'jsonwebtoken';
 import AuthRepository from '../repositories/kakao.auth.repository';
 
-const { REST_API_KEY, REDIRECT_URI } = process.env as {
+const { REST_API_KEY, REDIRECT_URI, JWT_SECRET_KEY } = process.env as {
   REST_API_KEY: string;
   REDIRECT_URI: string;
+  JWT_SECRET_KEY: string;
 };
 
-class AuthService {
+class KakaoAuthService {
   authRepository: AuthRepository;
 
   constructor() {
@@ -57,8 +58,6 @@ class AuthService {
       },
     });
 
-    console.log('here');
-
     let isUser = await this.authRepository.checkIsUser(data.id);
     if (!isUser) {
       isUser = await this.authRepository.registerUser(
@@ -68,7 +67,17 @@ class AuthService {
         result.refresh_token
       );
     }
-    return { token: result.access_token, login: 'kakao', userName: isUser.userName };
+
+    const token = jwt.sign({ userId: isUser.userId, userName: isUser.userName }, JWT_SECRET_KEY, {
+      expiresIn: '2h',
+    });
+
+    return {
+      userid: isUser.userId,
+      userName: isUser.userName,
+      profileImage: isUser.profileImage,
+      token,
+    };
   };
 }
-export default AuthService;
+export default KakaoAuthService;
