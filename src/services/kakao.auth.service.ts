@@ -1,5 +1,5 @@
 import axios from 'axios';
-import * as jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import AuthRepository from '../repositories/kakao.auth.repository';
 
 const { REST_API_KEY, REDIRECT_URI, JWT_SECRET_KEY } = process.env as {

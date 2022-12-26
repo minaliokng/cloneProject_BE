@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import * as multer from 'multer';
+import multer from 'multer';
 import LocalAuthController from '../controllers/local.auth.controller';
 import KakaoAuthController from '../controllers/kakao.auth.controller';
 

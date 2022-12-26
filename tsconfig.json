@@ -16,7 +16,8 @@
     "removeComments": true,
     "noErrorTruncation": true,
     "forceConsistentCasingInFileNames": true,
-    "strictPropertyInitialization": true
+    "strictPropertyInitialization": true,
+    "esModuleInterop": true
   },
   "include": ["src", "index.d.ts"],
   "exclude": ["node_modules"]

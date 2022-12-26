@@ -1,7 +1,7 @@
-import * as express from 'express';
-import * as cors from 'cors';
+import express from 'express';
+import cors from 'cors';
 import helmet from 'helmet';
-import * as compression from 'compression';
+import compression from 'compression';
 import morgan from './middlewares/morgan';
 import apiRouter from './routes';
 import errorHandler from './middlewares/errorHandler';

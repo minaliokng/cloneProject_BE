@@ -1,6 +1,6 @@
 import { badRequest } from '@hapi/boom';
-import * as jwt from 'jsonwebtoken';
-import * as bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 import LocalAuthRepository from '../repositories/local.auth.repository';
 import { signupPattern, loginPattern } from '../validation/local.auth.validation';
 
