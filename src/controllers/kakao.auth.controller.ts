@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
-import AuthService from '../services/kakao.auth.service';
+import KakaoAuthService from '../services/kakao.auth.service';
 
-class AuthController {
-  authService: AuthService;
+class KakaoAuthController {
+  authService: KakaoAuthService;
 
   constructor() {
-    this.authService = new AuthService();
+    this.authService = new KakaoAuthService();
   }
 
   loginKakao = (req: Request, res: Response) => {
@@ -20,4 +20,4 @@ class AuthController {
   };
 }
 
-export default AuthController;
+export default KakaoAuthController;

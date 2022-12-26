@@ -1,18 +1,61 @@
-import { Request, Response } from 'express';
+import { RequestHandler } from 'express';
+import { unauthorized } from '@hapi/boom';
 import * as jwt from 'jsonwebtoken';
 
-const { JWT_SECRET_KEY } = process.env;
+const { JWT_SECRET_KEY } = process.env as { JWT_SECRET_KEY: string };
 
-// 로그인 필요한 경우
-// const requireLogin = async (req: Request, res: Response, next) => {
-//   const { login } = req.body;
-//   const { authorization } = req.headers;
+const requireLogin: RequestHandler = (req, res, next) => {
+  const { authorization } = req.headers;
 
-//   try {
-//     if(!authorization) throw err;
-//   } catch (err) {
-//     res.status(200).
-//   };
-// }
+  try {
+    if (!authorization) throw unauthorized('로그인 정보 없음');
+    const [tokenType, tokenValue] = authorization.split(' ');
 
-// export default { requireLogin };
+    if (tokenType === 'Bearer' && tokenValue) {
+      const payload: any = jwt.verify(tokenValue, JWT_SECRET_KEY);
+
+      res.locals.userId = payload.userId;
+    }
+    next();
+  } catch (err) {
+    next(unauthorized('로그인 정보 없음'));
+  }
+};
+
+const requireNoLogin: RequestHandler = (req, res, next) => {
+  const { authorization } = req.headers;
+
+  try {
+    if (authorization) {
+      const [tokenType, tokenValue] = authorization.split(' ');
+
+      if (tokenType === 'Bearer' && tokenValue) {
+        jwt.verify(tokenValue, JWT_SECRET_KEY);
+        next(unauthorized('로그인 정보가 이미 있음'));
+      }
+    } else next();
+  } catch (err) {
+    next();
+  }
+};
+
+const passAnyway: RequestHandler = (req, res, next) => {
+  const { authorization } = req.headers;
+
+  try {
+    if (authorization) {
+      const [tokenType, tokenValue] = authorization.split(' ');
+
+      if (tokenType === 'Bearer' && tokenValue) {
+        const payload: any = jwt.verify(tokenValue, JWT_SECRET_KEY);
+
+        res.locals.userId = payload.userId;
+      }
+    }
+    next();
+  } catch (err) {
+    next();
+  }
+};
+
+export { requireLogin, requireNoLogin, passAnyway };

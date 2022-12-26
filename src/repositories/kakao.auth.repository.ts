@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 
-class AuthRepository {
+class KakaoAuthRepository {
   prisma: PrismaClient;
 
   constructor() {
@@ -35,4 +35,4 @@ class AuthRepository {
   };
 }
 
-export default AuthRepository;
+export default KakaoAuthRepository;
