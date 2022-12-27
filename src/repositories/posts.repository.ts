@@ -7,8 +7,16 @@ class PostsRepository {
     this.prisma = prisma;
   }
 
-  createPost = async (title: string, content: string, privateOption: number, userId: number) => {
-    await this.prisma.post.create({ data: { title, content, privateOption, userId } });
+  createPost = async (
+    title: string,
+    content: string,
+    privateOption: number,
+    userId: number,
+    postImage?: string
+  ) => {
+    await this.prisma.post.create({
+      data: { title, content, privateOption, userId, postImage },
+    });
   };
 
   getPosts = async () => {

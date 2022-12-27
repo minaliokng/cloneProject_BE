@@ -11,12 +11,21 @@ class PostsController {
 
   createPost = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      // const postImage = req.file.key
       const { userId } = res.locals;
       const { title, content, privateOption } = await postInputPattern.validateAsync(req.body);
-      await this.postsService.createPost(title, content, privateOption, userId);
+      if (req.file) {
+        const { location: postImage } = req.file as Express.MulterS3.File;
+        await this.postsService.createPost(title, content, privateOption, userId, postImage);
+      } else {
+        await this.postsService.createPost(title, content, privateOption, userId);
+      }
       return res.status(201).json({ message: '게시글 작성 성공' });
     } catch (err) {
+      if (req.file) {
+        const { location: postImage } = req.file as Express.MulterS3.File;
+        const imageKey = postImage.split('/')[postImage.split('/').length - 1];
+        await this.postsService.deleteS3Image(imageKey);
+      }
       return next(err);
     }
   };
