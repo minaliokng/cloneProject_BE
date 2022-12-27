@@ -1,9 +1,8 @@
 import { Router } from 'express';
-import * as multer from 'multer';
 import LocalAuthController from '../controllers/local.auth.controller';
 import KakaoAuthController from '../controllers/kakao.auth.controller';
 
-const upload = multer({ dest: 'uploads/', limits: { fileSize: 5 * 1024 * 1024 } });
+import multeruploader from '../middlewares/multer.profile';
 
 const authRouter = Router();
 const kakaoController = new KakaoAuthController();
@@ -12,7 +11,7 @@ const localController = new LocalAuthController();
 authRouter.get('/login/kakao', kakaoController.loginKakao);
 authRouter.get('/login/kakao/final', kakaoController.checkKakao);
 
-authRouter.post('/signup', upload.single('image'), localController.localSignup);
+authRouter.post('/signup', multeruploader.single('profileImage'), localController.localSignup);
 authRouter.post('/emailCheck', localController.emailCheck);
 authRouter.post('/login/local', localController.login);
 
