@@ -10,7 +10,11 @@ class LocalAuthController {
 
   localSignup: RequestHandler = async (req, res, next) => {
     try {
-      await this.localAuthService.localSignup(req.body);
+      if (req.file) {
+        const { location: profileImage } = req.file as Express.MulterS3.File;
+        await this.localAuthService.localSignup(req.body, profileImage);
+      } else await this.localAuthService.localSignup(req.body);
+
       res.status(201).json({ message: '가입 완료' });
     } catch (err) {
       next(err);

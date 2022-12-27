@@ -20,14 +20,14 @@ class LocalAuthService {
     return check;
   };
 
-  localSignup = async (userData: any) => {
+  localSignup = async (userData: any, profileImage?: string) => {
     const { email, userName, password } = await signupPattern.validateAsync(userData);
 
     const emailCheck = await this.emailCheck(email);
     if (emailCheck) throw badRequest('사용 중인 이메일');
 
     const hash = await bcrypt.hash(password, Number(salt));
-    await this.localAuthRepository.createUser(email, userName, hash);
+    await this.localAuthRepository.createUser(email, userName, hash, profileImage);
   };
 
   login = async (userData: any) => {

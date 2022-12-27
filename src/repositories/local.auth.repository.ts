@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { S3 } from '@aws-sdk/client-s3';
 
 class LocalAuthRepository {
   prisma: PrismaClient;
@@ -15,12 +16,13 @@ class LocalAuthRepository {
     return user;
   };
 
-  createUser = async (email: string, userName: string, password: string) => {
+  createUser = async (email: string, userName: string, password: string, profileImage?: string) => {
     await this.prisma.user.create({
       data: {
         email,
         userName,
         password,
+        profileImage,
       },
     });
   };
