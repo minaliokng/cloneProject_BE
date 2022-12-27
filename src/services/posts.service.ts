@@ -1,16 +1,27 @@
 import { badRequest, forbidden } from '@hapi/boom';
 import PostsRepository from '../repositories/posts.repository';
 import prisma from '../config/databases/prisma';
+import PostsS3Repository from '../repositories/posts.s3.repository';
+import s3 from '../config/AWS.s3';
 
 class PostsService {
   postsRepository: PostsRepository;
 
+  postsS3Repository: PostsS3Repository;
+
   constructor() {
     this.postsRepository = new PostsRepository(prisma);
+    this.postsS3Repository = new PostsS3Repository(s3);
   }
 
-  createPost = async (title: string, content: string, privateOption: number, userId: number) => {
-    await this.postsRepository.createPost(title, content, privateOption, userId);
+  createPost = async (
+    title: string,
+    content: string,
+    privateOption: number,
+    userId: number,
+    postImage?: string
+  ) => {
+    await this.postsRepository.createPost(title, content, privateOption, userId, postImage);
   };
 
   getPosts = async () => {
@@ -59,7 +70,17 @@ class PostsService {
 
     if (existPost.userId !== userId) throw forbidden('사용자 정보 불일치');
 
-    await this.postsRepository.deletePost(postId);
+    if (existPost.postImage) {
+      const imageKey = existPost.postImage.split('/')[existPost.postImage.split('/').length - 1];
+      await this.postsRepository.deletePost(postId);
+      await this.postsS3Repository.deleteS3Image(imageKey);
+    } else {
+      await this.postsRepository.deletePost(postId);
+    }
+  };
+
+  deleteS3Image = async (imageKey: string) => {
+    await this.postsS3Repository.deleteS3Image(imageKey);
   };
 }
 
