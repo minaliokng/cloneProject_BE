@@ -44,7 +44,7 @@ class PostsRepository {
         title: true,
         content: true,
         createdAt: true,
-        user: { select: { userName: true, profileImage: true } },
+        user: { select: { userId: true, userName: true, profileImage: true } },
         _count: { select: { comments: true } },
       },
     });
