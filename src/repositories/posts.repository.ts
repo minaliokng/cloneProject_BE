@@ -19,9 +19,26 @@ class PostsRepository {
     });
   };
 
-  getPosts = async () => {
+  getPostsOrderByTime = async () => {
     const posts = await this.prisma.post.findMany({
       orderBy: { createdAt: 'desc' },
+      where: { privateOption: 1 },
+      select: {
+        postId: true,
+        postImage: true,
+        title: true,
+        content: true,
+        createdAt: true,
+        user: { select: { userName: true, profileImage: true } },
+        _count: { select: { comments: true } },
+      },
+    });
+    return posts;
+  };
+
+  getPostsOrderByCount = async () => {
+    const posts = await this.prisma.post.findMany({
+      orderBy: [{ comments: { _count: 'desc' } }, { createdAt: 'desc' }],
       where: { privateOption: 1 },
       select: {
         postId: true,
