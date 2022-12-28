@@ -21,6 +21,7 @@ class PostsRepository {
 
   getPosts = async () => {
     const posts = await this.prisma.post.findMany({
+      orderBy: { createdAt: 'desc' },
       where: { privateOption: 1 },
       select: {
         postId: true,
