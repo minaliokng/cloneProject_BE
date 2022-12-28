@@ -2,6 +2,7 @@ import { Request } from 'express';
 import * as multer from 'multer';
 import * as multers3 from 'multer-s3';
 import * as shortid from 'shortid';
+import { badRequest } from '@hapi/boom';
 import s3 from '../config/AWS.s3';
 
 const multeruploader = multer({
@@ -31,7 +32,7 @@ const multeruploader = multer({
     ) {
       callback(null, true);
     } else {
-      callback(new Error('이미지 확장자 아님'));
+      callback(badRequest('이미지 형식이 아님'));
     }
   },
 });
