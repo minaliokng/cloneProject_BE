@@ -13,6 +13,7 @@ class LocalAuthController {
     try {
       if (req.file) {
         const { location: profileImage } = req.file as Express.MulterS3.File;
+        console.log(profileImage);
         await this.localAuthService.localSignup(req.body, profileImage);
       } else await this.localAuthService.localSignup(req.body);
 
@@ -70,10 +71,9 @@ class LocalAuthController {
 
   updateImage: RequestHandler = async (req, res, next) => {
     try {
-      console.log(req.file);
       if (req.file) {
         const { location: profileImage } = req.file as Express.MulterS3.File;
-        await this.localAuthService.updateImage(req.body.userId, profileImage);
+        await this.localAuthService.updateImage(req.body, profileImage);
 
         res.status(200).json({ message: '수정 완료', profileImage });
       } else throw badRequest('이미지 없음');

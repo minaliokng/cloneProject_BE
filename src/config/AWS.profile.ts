@@ -1,6 +1,6 @@
 import { S3 } from '@aws-sdk/client-s3';
 
-const s3 = new S3({
+const s3Setting = new S3({
   region: 'ap-northeast-2',
   credentials: {
     accessKeyId: process.env.S3_ACCESS_KEY_PROFILE as string,
@@ -8,4 +8,4 @@ const s3 = new S3({
   },
 });
 
-export default s3;
+export default s3Setting;
