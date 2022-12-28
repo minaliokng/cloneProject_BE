@@ -23,7 +23,6 @@ class KakaoAuthService {
       client_id: REST_API_KEY,
       redirect_uri: REDIRECT_URI,
       response_type: 'code',
-      // prompt: 'login',
     };
     const params = new URLSearchParams(config).toString();
 
