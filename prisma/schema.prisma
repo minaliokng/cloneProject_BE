@@ -32,7 +32,7 @@ model Token {
 model Post {
   postId        Int       @id @default(autoincrement())
   title         String
-  content       String
+  content       String    @db.VarChar(65000)
   postImage     String?
   privateOption Int
   createdAt     DateTime  @default(now())
