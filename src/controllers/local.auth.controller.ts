@@ -1,4 +1,5 @@
 import { RequestHandler } from 'express';
+import { badRequest } from '@hapi/boom';
 import LocalAuthService from '../services/local.auth.service';
 
 class LocalAuthController {
@@ -42,6 +43,40 @@ class LocalAuthController {
         profileImage,
         token,
       });
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  getUserDetail: RequestHandler = async (req, res, next) => {
+    try {
+      const { userId } = req.body;
+      const { email, userName, profileImage } = await this.localAuthService.getUserDetail(userId);
+
+      res.status(200).json({ email, userName, profileImage });
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  updateUserName: RequestHandler = async (req, res, next) => {
+    try {
+      const newName = await this.localAuthService.updateUserName(req.body);
+      res.status(200).json({ message: '수정 완료', userName: newName });
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  updateImage: RequestHandler = async (req, res, next) => {
+    try {
+      console.log(req.file);
+      if (req.file) {
+        const { location: profileImage } = req.file as Express.MulterS3.File;
+        await this.localAuthService.updateImage(req.body.userId, profileImage);
+
+        res.status(200).json({ message: '수정 완료', profileImage });
+      } else throw badRequest('이미지 없음');
     } catch (err) {
       next(err);
     }

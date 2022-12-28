@@ -2,7 +2,7 @@ import { badRequest } from '@hapi/boom';
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import LocalAuthRepository from '../repositories/local.auth.repository';
-import { signupPattern, loginPattern } from '../validation/local.auth.validation';
+import { signupPattern, loginPattern, namePattern } from '../validation/local.auth.validation';
 
 const { JWT_SECRET_KEY } = process.env as { JWT_SECRET_KEY: string };
 const { salt } = process.env as { salt: string };
@@ -56,6 +56,27 @@ class LocalAuthService {
     }
 
     throw badRequest('이메일 또는 비밀번호 불일치');
+  };
+
+  getUserDetail = async (userId: number) => {
+    const userData = await this.localAuthRepository.userIdCheck(userId);
+
+    if (!userData) throw badRequest('해당 사용자 없음');
+    else return userData;
+  };
+
+  updateUserName = async (userData: any) => {
+    const { userId, userName } = userData as { userId: number; userName: string };
+    await namePattern.validateAsync(userName);
+
+    await this.localAuthRepository.updateName(userId, userName);
+    return userName;
+  };
+
+  updateImage = async (userId: string, profileImage: string) => {
+    await this.localAuthRepository.updateImage(Number(userId), profileImage);
+
+    return profileImage;
   };
 }
 

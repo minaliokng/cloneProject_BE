@@ -16,6 +16,19 @@ class LocalAuthRepository {
     return user;
   };
 
+  userIdCheck = async (userId: number) => {
+    const user = await this.prisma.user.findUnique({
+      where: { userId },
+      select: {
+        email: true,
+        userName: true,
+        profileImage: true,
+      },
+    });
+
+    return user;
+  };
+
   createUser = async (email: string, userName: string, password: string, profileImage?: string) => {
     await this.prisma.user.create({
       data: {
@@ -33,6 +46,24 @@ class LocalAuthRepository {
         email,
         password,
       },
+    });
+
+    return user;
+  };
+
+  updateName = async (userId: number, userName: string) => {
+    const user = await this.prisma.user.update({
+      where: { userId },
+      data: { userName },
+    });
+
+    return user;
+  };
+
+  updateImage = async (userId: number, profileImage: string) => {
+    const user = await this.prisma.user.update({
+      where: { userId },
+      data: { profileImage },
     });
 
     return user;
