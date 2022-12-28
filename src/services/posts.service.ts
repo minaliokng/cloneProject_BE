@@ -24,8 +24,13 @@ class PostsService {
     await this.postsRepository.createPost(title, content, privateOption, userId, postImage);
   };
 
-  getPosts = async () => {
-    const posts = await this.postsRepository.getPosts();
+  getPostsOrderByTime = async () => {
+    const posts = await this.postsRepository.getPostsOrderByTime();
+    return posts;
+  };
+
+  getPostsOrderByCount = async () => {
+    const posts = await this.postsRepository.getPostsOrderByCount();
     return posts;
   };
 
