@@ -2,7 +2,7 @@ import { Router } from 'express';
 import LocalAuthController from '../controllers/local.auth.controller';
 import KakaoAuthController from '../controllers/kakao.auth.controller';
 
-import multeruploader from '../middlewares/multer.profile';
+import { multeruploader } from '../middlewares/multer.profile';
 import * as auth from '../middlewares/auth.middleware';
 
 const authRouter = Router();

@@ -3,6 +3,7 @@ import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import LocalAuthRepository from '../repositories/local.auth.repository';
 import { signupPattern, loginPattern, namePattern } from '../validation/local.auth.validation';
+import { deleteS3Image } from '../middlewares/multer.profile';
 
 const { JWT_SECRET_KEY } = process.env as { JWT_SECRET_KEY: string };
 const { salt } = process.env as { salt: string };
@@ -27,7 +28,9 @@ class LocalAuthService {
     if (emailCheck) throw badRequest('사용 중인 이메일');
 
     const hash = await bcrypt.hash(password, Number(salt));
-    await this.localAuthRepository.createUser(email, userName, hash, profileImage);
+    let fileName;
+    if (profileImage) fileName = profileImage.split('/')[4];
+    await this.localAuthRepository.createUser(email, userName, hash, fileName);
   };
 
   login = async (userData: any) => {
@@ -49,7 +52,7 @@ class LocalAuthService {
         return {
           userId: user.userId,
           userName: user.userName,
-          profileImage: user.profileImage,
+          profileImage: `${process.env.PROFILE_BASE_URL}${user.profileImage}`,
           token,
         };
       }
@@ -62,7 +65,10 @@ class LocalAuthService {
     const userData = await this.localAuthRepository.userIdCheck(userId);
 
     if (!userData) throw badRequest('해당 사용자 없음');
-    else return userData;
+    else {
+      userData.profileImage = `${process.env.PROFILE_BASE_URL}${userData?.profileImage}`;
+      return userData;
+    }
   };
 
   updateUserName = async (userData: any) => {
@@ -73,8 +79,13 @@ class LocalAuthService {
     return userName;
   };
 
-  updateImage = async (userId: string, profileImage: string) => {
-    await this.localAuthRepository.updateImage(Number(userId), profileImage);
+  updateImage = async (userData: any, profileImage: string) => {
+    const { userId, imageUrl } = userData as { userId: number; imageUrl?: string };
+    const fileName = profileImage.split('/')[4];
+    const deleteImage = imageUrl?.split('/')[4];
+    await this.localAuthRepository.updateImage(Number(userId), fileName);
+
+    if (deleteImage) deleteS3Image(deleteImage);
 
     return profileImage;
   };
