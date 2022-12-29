@@ -49,10 +49,14 @@ class LocalAuthService {
           }
         );
 
+        let url = '';
+        if (user.profileImage) url = user.profileImage;
+        else url = (Number(user.userId) % 5).toString();
+
         return {
           userId: user.userId,
           userName: user.userName,
-          profileImage: `${process.env.PROFILE_BASE_URL}${user.profileImage}`,
+          profileImage: `${process.env.PROFILE_BASE_URL}${url}.png`,
           token,
         };
       }
@@ -66,7 +70,11 @@ class LocalAuthService {
 
     if (!userData) throw badRequest('해당 사용자 없음');
     else {
-      userData.profileImage = `${process.env.PROFILE_BASE_URL}${userData?.profileImage}`;
+      let url = '';
+      if (userData.profileImage) url = userData.profileImage;
+      else url = (Number(userId) % 5).toString();
+
+      userData.profileImage = `${process.env.PROFILE_BASE_URL}${url}.png`;
       return userData;
     }
   };
@@ -85,7 +93,7 @@ class LocalAuthService {
     const deleteImage = imageUrl?.split('/')[4];
     await this.localAuthRepository.updateImage(Number(userId), fileName);
 
-    if (deleteImage) deleteS3Image(deleteImage);
+    if (deleteImage && deleteImage.length > 7) deleteS3Image(deleteImage);
 
     return profileImage;
   };
