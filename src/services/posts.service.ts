@@ -21,7 +21,6 @@ class PostsService {
     userId: number,
     postImage?: string
   ) => {
-    // const changedContent = content.replace(/(?:\r\n|\r|\n)/gi, '<br/>');
     await this.postsRepository.createPost(title, content, privateOption, userId, postImage);
   };
 
@@ -29,7 +28,10 @@ class PostsService {
     const posts = await this.postsRepository.getPostsOrderByTime();
     return posts.map((post) => {
       const newPost = JSON.parse(JSON.stringify(post));
-      newPost.user.profileImage = (process.env.PROFILE_BASE_URL as string) + post.user.profileImage;
+      let url = '';
+      if (newPost.user.profileImage) url = newPost.user.profileImage;
+      else url = (Number(post.userId) % 5).toString().concat('.png');
+      newPost.user.profileImage = (process.env.PROFILE_BASE_URL as string) + url;
       return newPost;
     });
   };
@@ -38,7 +40,10 @@ class PostsService {
     const posts = await this.postsRepository.getPostsOrderByCount();
     return posts.map((post) => {
       const newPost = JSON.parse(JSON.stringify(post));
-      newPost.user.profileImage = (process.env.PROFILE_BASE_URL as string) + post.user.profileImage;
+      let url = '';
+      if (newPost.user.profileImage) url = newPost.user.profileImage;
+      else url = (Number(post.userId) % 5).toString().concat('.png');
+      newPost.user.profileImage = (process.env.PROFILE_BASE_URL as string) + url;
       return newPost;
     });
   };
@@ -47,7 +52,11 @@ class PostsService {
     const post = await this.postsRepository.getPost(postId);
 
     if (!post) throw badRequest('존재하지 않는 게시글');
-    post.user.profileImage = (process.env.PROFILE_BASE_URL as string) + post.user.profileImage;
+
+    let url = '';
+    if (post.user.profileImage) url = post.user.profileImage;
+    else url = (Number(post.userId) % 5).toString().concat('.png');
+    post.user.profileImage = (process.env.PROFILE_BASE_URL as string) + url;
     return post;
   };
 
@@ -73,7 +82,6 @@ class PostsService {
     if (!existPost) throw badRequest('존재하지 않는 게시글');
 
     if (existPost.userId !== userId) throw forbidden('사용자 정보 불일치');
-    // const changedContent = content.replace(/\r\n|\r|\n/g, '<br />');
     await this.postsRepository.updatePost(postId, title, content, privateOption);
   };
 
