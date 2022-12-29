@@ -9,13 +9,13 @@ class PostsRepository {
 
   createPost = async (
     title: string,
-    changedContent: string,
+    content: string,
     privateOption: number,
     userId: number,
     postImage?: string
   ) => {
     await this.prisma.post.create({
-      data: { title, changedContent, privateOption, userId, postImage },
+      data: { title, content, privateOption, userId, postImage },
     });
   };
 
@@ -27,7 +27,7 @@ class PostsRepository {
         postId: true,
         postImage: true,
         title: true,
-        changedContent: true,
+        content: true,
         createdAt: true,
         user: { select: { userName: true, profileImage: true } },
         _count: { select: { comments: true } },
@@ -44,7 +44,7 @@ class PostsRepository {
         postId: true,
         postImage: true,
         title: true,
-        changedContent: true,
+        content: true,
         createdAt: true,
         user: { select: { userName: true, profileImage: true } },
         _count: { select: { comments: true } },
@@ -60,7 +60,7 @@ class PostsRepository {
         postId: true,
         postImage: true,
         title: true,
-        changedContent: true,
+        content: true,
         createdAt: true,
         user: { select: { userId: true, userName: true, profileImage: true } },
         _count: { select: { comments: true } },
@@ -79,7 +79,7 @@ class PostsRepository {
       where: { postId },
       select: {
         title: true,
-        changedContent: true,
+        content: true,
         postImage: true,
         privateOption: true,
         userId: true,
@@ -88,15 +88,10 @@ class PostsRepository {
     return writtenPost;
   };
 
-  updatePost = async (
-    postId: number,
-    title: string,
-    changedContent: string,
-    privateOption: number
-  ) => {
+  updatePost = async (postId: number, title: string, content: string, privateOption: number) => {
     await this.prisma.post.updateMany({
       where: { postId },
-      data: { title, changedContent, privateOption },
+      data: { title, content, privateOption },
     });
   };
 
