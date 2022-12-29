@@ -15,10 +15,6 @@ const signupPattern = joi.object().keys({
   profileImage: joi.string().allow(''),
 });
 
-const emailPatter = joi.object().keys({
-  email: joi.string().email().required(),
-});
-
 const loginPattern = joi.object().keys({
   email: joi.string().email().required(),
   password: joi
@@ -34,4 +30,4 @@ const namePattern = joi
   .regex(/^[a-zA-Z0-9가-힣_\sㄱ-ㅎㅏ-ㅣ]{1,20}$/)
   .required();
 
-export { signupPattern, loginPattern, namePattern, emailPatter };
+export { signupPattern, loginPattern, namePattern };
