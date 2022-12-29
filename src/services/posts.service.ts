@@ -21,7 +21,7 @@ class PostsService {
     userId: number,
     postImage?: string
   ) => {
-    const changedContent = content.replace(/(?:\\r\\n|\\r|\\n)/gi, '<br />');
+    const changedContent = content.replace(/(?:\r\n|\r|\n)/gi, '<br/>');
     await this.postsRepository.createPost(title, changedContent, privateOption, userId, postImage);
   };
 
