@@ -7,7 +7,8 @@ const postsRouter = Router();
 const postsController = new PostsController();
 
 postsRouter.post('/', requireLogin, multeruploader.single('postImage'), postsController.createPost);
-postsRouter.get('/', passAnyway, postsController.getAllPosts);
+postsRouter.get('/', passAnyway, postsController.getAllPostsOrderByTime);
+postsRouter.get('/trending', passAnyway, postsController.getAllPostsOrderByCount);
 postsRouter.get('/:postId', passAnyway, postsController.getDtailPost);
 postsRouter.get('/update/:postId', requireLogin, postsController.getWrittenPost);
 postsRouter.patch('/:postId', requireLogin, postsController.updatePost);

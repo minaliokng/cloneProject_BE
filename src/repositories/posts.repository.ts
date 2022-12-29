@@ -9,17 +9,17 @@ class PostsRepository {
 
   createPost = async (
     title: string,
-    content: string,
+    changedContent: string,
     privateOption: number,
     userId: number,
     postImage?: string
   ) => {
     await this.prisma.post.create({
-      data: { title, content, privateOption, userId, postImage },
+      data: { title, changedContent, privateOption, userId, postImage },
     });
   };
 
-  getPosts = async () => {
+  getPostsOrderByTime = async () => {
     const posts = await this.prisma.post.findMany({
       orderBy: { createdAt: 'desc' },
       where: { privateOption: 1 },
@@ -27,7 +27,24 @@ class PostsRepository {
         postId: true,
         postImage: true,
         title: true,
-        content: true,
+        changedContent: true,
+        createdAt: true,
+        user: { select: { userName: true, profileImage: true } },
+        _count: { select: { comments: true } },
+      },
+    });
+    return posts;
+  };
+
+  getPostsOrderByCount = async () => {
+    const posts = await this.prisma.post.findMany({
+      orderBy: [{ comments: { _count: 'desc' } }, { createdAt: 'desc' }],
+      where: { privateOption: 1 },
+      select: {
+        postId: true,
+        postImage: true,
+        title: true,
+        changedContent: true,
         createdAt: true,
         user: { select: { userName: true, profileImage: true } },
         _count: { select: { comments: true } },
@@ -43,7 +60,7 @@ class PostsRepository {
         postId: true,
         postImage: true,
         title: true,
-        content: true,
+        changedContent: true,
         createdAt: true,
         user: { select: { userId: true, userName: true, profileImage: true } },
         _count: { select: { comments: true } },
@@ -62,7 +79,7 @@ class PostsRepository {
       where: { postId },
       select: {
         title: true,
-        content: true,
+        changedContent: true,
         postImage: true,
         privateOption: true,
         userId: true,
@@ -71,10 +88,15 @@ class PostsRepository {
     return writtenPost;
   };
 
-  updatePost = async (postId: number, title: string, content: string, privateOption: number) => {
+  updatePost = async (
+    postId: number,
+    title: string,
+    changedContent: string,
+    privateOption: number
+  ) => {
     await this.prisma.post.updateMany({
       where: { postId },
-      data: { title, content, privateOption },
+      data: { title, changedContent, privateOption },
     });
   };
 

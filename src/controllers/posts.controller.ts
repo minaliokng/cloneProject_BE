@@ -30,9 +30,18 @@ class PostsController {
     }
   };
 
-  getAllPosts = async (req: Request, res: Response, next: NextFunction) => {
+  getAllPostsOrderByTime = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const posts = await this.postsService.getPosts();
+      const posts = await this.postsService.getPostsOrderByTime();
+      return res.status(200).json({ posts });
+    } catch (err) {
+      return next(err);
+    }
+  };
+
+  getAllPostsOrderByCount = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const posts = await this.postsService.getPostsOrderByCount();
       return res.status(200).json({ posts });
     } catch (err) {
       return next(err);
