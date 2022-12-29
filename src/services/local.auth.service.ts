@@ -29,7 +29,7 @@ class LocalAuthService {
 
     const hash = await bcrypt.hash(password, Number(salt));
     let fileName;
-    if (image) fileName = image.split('/')[4];
+    if (image) [, , , , fileName] = image.split('/');
     await this.localAuthRepository.createUser(email, userName, hash, fileName);
   };
 
@@ -51,12 +51,12 @@ class LocalAuthService {
 
         let url = '';
         if (user.profileImage) url = user.profileImage;
-        else url = (Number(user.userId) % 5).toString();
+        else url = `${(Number(user.userId) % 5).toString()}.png`;
 
         return {
           userId: user.userId,
           userName: user.userName,
-          profileImage: `${process.env.PROFILE_BASE_URL}${url}.png`,
+          profileImage: `${process.env.PROFILE_BASE_URL}${url}`,
           token,
         };
       }
@@ -72,9 +72,9 @@ class LocalAuthService {
     else {
       let url = '';
       if (userData.profileImage) url = userData.profileImage;
-      else url = (Number(userId) % 5).toString();
+      else url = `${(Number(userId) % 5).toString()}.png`;
 
-      userData.profileImage = `${process.env.PROFILE_BASE_URL}${url}.png`;
+      userData.profileImage = `${process.env.PROFILE_BASE_URL}${url}`;
       return userData;
     }
   };
