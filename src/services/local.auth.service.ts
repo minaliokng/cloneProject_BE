@@ -2,7 +2,12 @@ import { badRequest } from '@hapi/boom';
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import LocalAuthRepository from '../repositories/local.auth.repository';
-import { signupPattern, loginPattern, namePattern } from '../validation/local.auth.validation';
+import {
+  signupPattern,
+  loginPattern,
+  namePattern,
+  emailPatter,
+} from '../validation/local.auth.validation';
 import { deleteS3Image } from '../middlewares/multer.profile';
 
 const { JWT_SECRET_KEY } = process.env as { JWT_SECRET_KEY: string };
@@ -16,6 +21,7 @@ class LocalAuthService {
   }
 
   emailCheck = async (email: string) => {
+    await emailPatter.validateAsync(email);
     const check = await this.localAuthRepository.emailCheck(email);
 
     return check;
