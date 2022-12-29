@@ -12,7 +12,7 @@ const signupPattern = joi.object().keys({
     .max(16)
     .regex(/^[a-zA-Z0-9]{2,20}$/)
     .required(),
-  profileImage: joi.string(),
+  profileImage: joi.string().allow(''),
 });
 
 const loginPattern = joi.object().keys({

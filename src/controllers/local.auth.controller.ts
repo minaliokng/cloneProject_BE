@@ -13,7 +13,6 @@ class LocalAuthController {
     try {
       if (req.file) {
         const { location: profileImage } = req.file as Express.MulterS3.File;
-        console.log(profileImage);
         await this.localAuthService.localSignup(req.body, profileImage);
       } else await this.localAuthService.localSignup(req.body);
 

@@ -21,7 +21,7 @@ class LocalAuthService {
     return check;
   };
 
-  localSignup = async (userData: any, profileImage?: string) => {
+  localSignup = async (userData: any, image?: string) => {
     const { email, userName, password } = await signupPattern.validateAsync(userData);
 
     const emailCheck = await this.emailCheck(email);
@@ -29,7 +29,7 @@ class LocalAuthService {
 
     const hash = await bcrypt.hash(password, Number(salt));
     let fileName;
-    if (profileImage) fileName = profileImage.split('/')[4];
+    if (image) fileName = image.split('/')[4];
     await this.localAuthRepository.createUser(email, userName, hash, fileName);
   };
 
