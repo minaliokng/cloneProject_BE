@@ -9,6 +9,7 @@ const multeruploader = multer({
     s3,
     bucket: process.env.BUCKET_NAME_PROFILE as string,
     acl: 'public-read',
+    contentType: multers3.AUTO_CONTENT_TYPE,
     key(req, file, callback) {
       const fileType = file.mimetype.split('/')[1];
 
