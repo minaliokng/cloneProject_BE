@@ -21,8 +21,8 @@ class PostsService {
     userId: number,
     postImage?: string
   ) => {
-    const changedContent = content.replace(/(?:\r\n|\r|\n)/gi, '<br/>');
-    await this.postsRepository.createPost(title, changedContent, privateOption, userId, postImage);
+    // const changedContent = content.replace(/(?:\r\n|\r|\n)/gi, '<br/>');
+    await this.postsRepository.createPost(title, content, privateOption, userId, postImage);
   };
 
   getPostsOrderByTime = async () => {
@@ -73,8 +73,8 @@ class PostsService {
     if (!existPost) throw badRequest('존재하지 않는 게시글');
 
     if (existPost.userId !== userId) throw forbidden('사용자 정보 불일치');
-    const changedContent = content.replace(/\r\n|\r|\n/g, '<br />');
-    await this.postsRepository.updatePost(postId, title, changedContent, privateOption);
+    // const changedContent = content.replace(/\r\n|\r|\n/g, '<br />');
+    await this.postsRepository.updatePost(postId, title, content, privateOption);
   };
 
   deletePost = async (userId: number, postId: number) => {
