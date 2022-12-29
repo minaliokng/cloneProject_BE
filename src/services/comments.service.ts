@@ -33,7 +33,12 @@ class CommentsService {
 
     const comments = await this.commentsRepository.findMany(postId);
 
-    return comments;
+    return comments.map((comment) => {
+      const newComment = JSON.parse(JSON.stringify(comment));
+      newComment.user.profileImage =
+        (process.env.PROFILE_BASE_URL as string) + comment.user.profileImage;
+      return newComment;
+    });
   }
 
   public async updateComment(userId: number, commentId: number, content: string) {
