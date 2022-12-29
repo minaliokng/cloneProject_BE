@@ -27,7 +27,7 @@ const loginPattern = joi.object().keys({
 
 const namePattern = joi
   .string()
-  .regex(/^[a-zA-Z0-9가-힣_]{1,20}$/)
+  .regex(/^[a-zA-Z0-9가-힣_\s]{1,20}$/)
   .required();
 
 export { signupPattern, loginPattern, namePattern };
