@@ -34,9 +34,13 @@ class CommentsService {
     const comments = await this.commentsRepository.findMany(postId);
 
     return comments.map((comment) => {
+      if (!process.env.PROFILE_BASE_URL) throw new Error();
       const newComment = JSON.parse(JSON.stringify(comment));
-      newComment.user.profileImage =
-        (process.env.PROFILE_BASE_URL as string) + comment.user.profileImage;
+      newComment.user.profileImage = comment.user.profileImage
+        ? process.env.PROFILE_BASE_URL + comment.user.profileImage
+        : (newComment.user.profileImage = `${process.env.PROFILE_BASE_URL}${
+            comment.user.userId % 5
+          }.png`);
       return newComment;
     });
   }
