@@ -47,7 +47,7 @@ class PostsService {
     const post = await this.postsRepository.getPost(postId);
 
     if (!post) throw badRequest('존재하지 않는 게시글');
-
+    post.user.profileImage = (process.env.PROFILE_BASE_URL as string) + post.user.profileImage;
     return post;
   };
 
